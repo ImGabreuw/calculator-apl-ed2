@@ -5,13 +5,13 @@ import com.github.imgabreuw.token.NumberToken;
 import com.github.imgabreuw.token.OperatorToken;
 import com.github.imgabreuw.token.ParenthesisToken;
 import com.github.imgabreuw.token.Token;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class LexerTest {
 
@@ -101,7 +101,7 @@ class LexerTest {
 
     @Test
     void testInvalidCharacter() {
-        Assertions.assertThatThrownBy(() -> underTest.tokenize("2 + x"))
+        assertThatThrownBy(() -> underTest.tokenize("2 + x"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Unexpected character: x");
     }
@@ -169,4 +169,80 @@ class LexerTest {
                 );
     }
 
+    @Test
+    void shouldBeValidExpression1() {
+        List<Token> tokens = underTest.tokenize("1+2*3");
+        assertThat(tokens)
+                .containsExactly(
+                        new NumberToken("1"),
+                        new OperatorToken('+'),
+                        new NumberToken("2"),
+                        new OperatorToken('*'),
+                        new NumberToken("3")
+                );
+    }
+
+    @Test
+    void shouldBeValidExpression2() {
+        List<Token> tokens = underTest.tokenize("(45+20) * 2 - 15");
+        assertThat(tokens)
+                .containsExactly(
+                        new ParenthesisToken('('),
+                        new NumberToken("45"),
+                        new OperatorToken('+'),
+                        new NumberToken("20"),
+                        new ParenthesisToken(')'),
+                        new OperatorToken('*'),
+                        new NumberToken("2"),
+                        new OperatorToken('-'),
+                        new NumberToken("15")
+                );
+    }
+
+    @Test
+    void shouldBeValidExpression3() {
+        List<Token> tokens = underTest.tokenize("        0.5*3/0.25");
+        assertThat(tokens)
+                .containsExactly(
+                        new NumberToken("0.5"),
+                        new OperatorToken('*'),
+                        new NumberToken("3"),
+                        new OperatorToken('/'),
+                        new NumberToken("0.25")
+                );
+    }
+
+    @Test
+    void shouldBeValidExpression4() {
+        List<Token> tokens = underTest.tokenize("        0,5*3/0,25");
+        assertThat(tokens)
+                .containsExactly(
+                        new NumberToken("0.5"),
+                        new OperatorToken('*'),
+                        new NumberToken("3"),
+                        new OperatorToken('/'),
+                        new NumberToken("0.25")
+                );
+    }
+
+    @Test
+    void shouldThrowErrorForInvalidCharactersInMultiplicationExpression() {
+        assertThatThrownBy(() -> underTest.tokenize("x * y"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Unexpected character: x");
+    }
+
+    @Test
+    void shouldThrowErrorForInvalidModuloOperator() {
+        assertThatThrownBy(() -> underTest.tokenize("5 % 2"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Unexpected character: %");
+    }
+
+    @Test
+    void shouldThrowErrorForInvalidEqualsOperator() {
+        assertThatThrownBy(() -> underTest.tokenize("1 + 2 = 3"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Unexpected character: =");
+    }
 }
