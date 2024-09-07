@@ -1,20 +1,20 @@
 package com.github.imgabreuw.processor;
 
-import com.github.imgabreuw.token.OperatorToken;
 import com.github.imgabreuw.token.Token;
+import com.github.imgabreuw.token.operator.SumOperatorToken;
 
-public class OperatorProcessor implements TokenProcessor {
+public class SumOperatorProcessor implements TokenProcessor {
 
     @Override
     public Token process(String input, int[] index) {
         char currentChar = input.charAt(index[0]);
 
-        if ("+-*/".indexOf(currentChar) == -1) {
+        if (currentChar != '+') {
             return null;
         }
 
         index[0]++;
-        return new OperatorToken(currentChar);
+        return new SumOperatorToken();
     }
 
 }

@@ -1,6 +1,6 @@
 package com.github.imgabreuw.processor;
 
-import com.github.imgabreuw.token.ParenthesisToken;
+import com.github.imgabreuw.token.operator.ParenthesisOperatorToken;
 import com.github.imgabreuw.token.Token;
 
 public class ParenthesisProcessor implements TokenProcessor {
@@ -14,7 +14,7 @@ public class ParenthesisProcessor implements TokenProcessor {
         }
 
         index[0]++;
-        return new ParenthesisToken(currentChar);
+        return new ParenthesisOperatorToken(currentChar);
     }
 
 }

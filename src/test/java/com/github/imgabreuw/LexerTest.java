@@ -1,9 +1,9 @@
 package com.github.imgabreuw;
 
 import com.github.imgabreuw.processor.*;
-import com.github.imgabreuw.token.NumberToken;
-import com.github.imgabreuw.token.OperatorToken;
-import com.github.imgabreuw.token.ParenthesisToken;
+import com.github.imgabreuw.token.number.NumberToken;
+import com.github.imgabreuw.token.operator.*;
+import com.github.imgabreuw.token.operator.ParenthesisOperatorToken;
 import com.github.imgabreuw.token.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,10 +20,13 @@ class LexerTest {
     @BeforeEach
     void setUp() {
         List<TokenProcessor> pipeline = List.of(
-                new NumberProcessor(),
-                new OperatorProcessor(),
+                new WhitespaceProcessor(),
                 new ParenthesisProcessor(),
-                new WhitespaceProcessor()
+                new SumOperatorProcessor(),
+                new SubtractionOperatorProcessor(),
+                new MultiplicationOperatorProcessor(),
+                new DivisionOperatorProcessor(),
+                new NumberProcessor()
         );
 
         underTest = new Lexer(pipeline);
@@ -34,7 +37,7 @@ class LexerTest {
     void testSimpleExpression() {
         List<Token> tokens = underTest.tokenize("1+2");
         assertThat(tokens)
-                .containsExactly(new NumberToken("1"), new OperatorToken('+'), new NumberToken("2"));
+                .containsExactly(new NumberToken("1"), new SumOperatorToken(), new NumberToken("2"));
     }
 
     @Test
@@ -42,12 +45,12 @@ class LexerTest {
         List<Token> tokens = underTest.tokenize("(3+4)*5");
         assertThat(tokens)
                 .containsExactly(
-                        new ParenthesisToken('('),
+                        new ParenthesisOperatorToken('('),
                         new NumberToken("3"),
-                        new OperatorToken('+'),
+                        new SumOperatorToken(),
                         new NumberToken("4"),
-                        new ParenthesisToken(')'),
-                        new OperatorToken('*'),
+                        new ParenthesisOperatorToken(')'),
+                        new MultiplicationOperatorToken(),
                         new NumberToken("5")
                 );
     }
@@ -58,15 +61,15 @@ class LexerTest {
         assertThat(tokens)
                 .containsExactly(
                         new NumberToken("10"),
-                        new OperatorToken('+'),
-                        new ParenthesisToken('('),
+                        new SumOperatorToken(),
+                        new ParenthesisOperatorToken('('),
                         new NumberToken("2"),
-                        new OperatorToken('*'),
+                        new MultiplicationOperatorToken(),
                         new NumberToken("3"),
-                        new ParenthesisToken(')'),
-                        new OperatorToken('-'),
+                        new ParenthesisOperatorToken(')'),
+                        new SubtractionOperatorToken(),
                         new NumberToken("7"),
-                        new OperatorToken('/'),
+                        new DivisionOperatorToken(),
                         new NumberToken("1.5")
                 );
     }
@@ -77,14 +80,14 @@ class LexerTest {
         assertThat(tokens)
                 .containsExactly(
                         new NumberToken("12"),
-                        new OperatorToken('+'),
+                        new SumOperatorToken(),
                         new NumberToken("4"),
-                        new OperatorToken('*'),
-                        new ParenthesisToken('('),
+                        new MultiplicationOperatorToken(),
+                        new ParenthesisOperatorToken('('),
                         new NumberToken("3"),
-                        new OperatorToken('-'),
+                        new SubtractionOperatorToken(),
                         new NumberToken("1"),
-                        new ParenthesisToken(')')
+                        new ParenthesisOperatorToken(')')
                 );
     }
 
@@ -94,7 +97,7 @@ class LexerTest {
         assertThat(tokens)
                 .containsExactly(
                         new NumberToken("3.14"),
-                        new OperatorToken('+'),
+                        new SumOperatorToken(),
                         new NumberToken("2.71")
                 );
     }
@@ -118,13 +121,13 @@ class LexerTest {
         assertThat(tokens)
                 .containsExactly(
                         new NumberToken("1"),
-                        new OperatorToken('+'),
+                        new SumOperatorToken(),
                         new NumberToken("2"),
-                        new OperatorToken('-'),
+                        new SubtractionOperatorToken(),
                         new NumberToken("3"),
-                        new OperatorToken('*'),
+                        new MultiplicationOperatorToken(),
                         new NumberToken("4"),
-                        new OperatorToken('/'),
+                        new DivisionOperatorToken(),
                         new NumberToken("5")
                 );
     }
@@ -134,21 +137,21 @@ class LexerTest {
         List<Token> tokens = underTest.tokenize("((1+2)*3)/(4-5)");
         assertThat(tokens)
                 .containsExactly(
-                        new ParenthesisToken('('),
-                        new ParenthesisToken('('),
+                        new ParenthesisOperatorToken('('),
+                        new ParenthesisOperatorToken('('),
                         new NumberToken("1"),
-                        new OperatorToken('+'),
+                        new SumOperatorToken(),
                         new NumberToken("2"),
-                        new ParenthesisToken(')'),
-                        new OperatorToken('*'),
+                        new ParenthesisOperatorToken(')'),
+                        new MultiplicationOperatorToken(),
                         new NumberToken("3"),
-                        new ParenthesisToken(')'),
-                        new OperatorToken('/'),
-                        new ParenthesisToken('('),
+                        new ParenthesisOperatorToken(')'),
+                        new DivisionOperatorToken(),
+                        new ParenthesisOperatorToken('('),
                         new NumberToken("4"),
-                        new OperatorToken('-'),
+                        new SubtractionOperatorToken(),
                         new NumberToken("5"),
-                        new ParenthesisToken(')')
+                        new ParenthesisOperatorToken(')')
                 );
     }
 
@@ -158,14 +161,14 @@ class LexerTest {
         assertThat(tokens)
                 .containsExactly(
                         new NumberToken("1"),
-                        new OperatorToken('+'),
+                        new SumOperatorToken(),
                         new NumberToken("2"),
-                        new OperatorToken('*'),
-                        new ParenthesisToken('('),
+                        new MultiplicationOperatorToken(),
+                        new ParenthesisOperatorToken('('),
                         new NumberToken("3"),
-                        new OperatorToken('-'),
+                        new SubtractionOperatorToken(),
                         new NumberToken("4"),
-                        new ParenthesisToken(')')
+                        new ParenthesisOperatorToken(')')
                 );
     }
 
@@ -175,9 +178,9 @@ class LexerTest {
         assertThat(tokens)
                 .containsExactly(
                         new NumberToken("1"),
-                        new OperatorToken('+'),
+                        new SumOperatorToken(),
                         new NumberToken("2"),
-                        new OperatorToken('*'),
+                        new MultiplicationOperatorToken(),
                         new NumberToken("3")
                 );
     }
@@ -187,14 +190,14 @@ class LexerTest {
         List<Token> tokens = underTest.tokenize("(45+20) * 2 - 15");
         assertThat(tokens)
                 .containsExactly(
-                        new ParenthesisToken('('),
+                        new ParenthesisOperatorToken('('),
                         new NumberToken("45"),
-                        new OperatorToken('+'),
+                        new SumOperatorToken(),
                         new NumberToken("20"),
-                        new ParenthesisToken(')'),
-                        new OperatorToken('*'),
+                        new ParenthesisOperatorToken(')'),
+                        new MultiplicationOperatorToken(),
                         new NumberToken("2"),
-                        new OperatorToken('-'),
+                        new SubtractionOperatorToken(),
                         new NumberToken("15")
                 );
     }
@@ -205,9 +208,9 @@ class LexerTest {
         assertThat(tokens)
                 .containsExactly(
                         new NumberToken("0.5"),
-                        new OperatorToken('*'),
+                        new MultiplicationOperatorToken(),
                         new NumberToken("3"),
-                        new OperatorToken('/'),
+                        new DivisionOperatorToken(),
                         new NumberToken("0.25")
                 );
     }
@@ -218,9 +221,9 @@ class LexerTest {
         assertThat(tokens)
                 .containsExactly(
                         new NumberToken("0.5"),
-                        new OperatorToken('*'),
+                        new MultiplicationOperatorToken(),
                         new NumberToken("3"),
-                        new OperatorToken('/'),
+                        new DivisionOperatorToken(),
                         new NumberToken("0.25")
                 );
     }
