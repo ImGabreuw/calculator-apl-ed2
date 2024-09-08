@@ -2,7 +2,10 @@ package com.github.imgabreuw;
 
 import com.github.imgabreuw.processor.*;
 import com.github.imgabreuw.token.Token;
+import com.github.imgabreuw.tree.BinaryExpressionTree;
 
+import java.util.Deque;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,8 +23,11 @@ public class Main {
                 new NumberProcessor()
         );
         Lexer lexer = new Lexer(pipeline);
+        PostfixNotation postfixNotation = new PostfixNotation();
+        Parser parser = new Parser();
 
-        List<Token> tokens;
+        List<Token> tokens = null;
+        BinaryExpressionTree tree = null;
 
         try (Scanner scanner = new Scanner(System.in)) {
             do {
@@ -36,20 +42,71 @@ public class Main {
                         """);
 
                 System.out.print("Opção: ");
-                option = scanner.nextInt();
+                try {
+                    String rawOption = scanner.next();
+                    option = Integer.parseInt(rawOption);
+                    scanner.nextLine();
+                } catch (NumberFormatException e) {
+                    System.out.println("Opção inválida.");
+                }
 
                 switch (option) {
                     case 1:
                         System.out.print("Expressão: ");
-                        scanner.nextLine();
                         String expression = scanner.nextLine();
 
                         try {
                             tokens = lexer.tokenize(expression);
-                            System.out.println(tokens.size());
                         } catch (IllegalArgumentException e) {
                             System.out.println("Expressão inválida.");
                         }
+                        break;
+                    case 2:
+                        if (tokens == null || tokens.isEmpty()) {
+                            System.out.println("Não há nenhum expressão para ser avaliada.");
+                            break;
+                        }
+
+                        try {
+                            Deque<Token> postfix = postfixNotation.convert(tokens);
+
+                            if (postfix.isEmpty()) {
+                                System.out.println("Expressão inválida.");
+                                break;
+                            }
+
+                            tree = parser.parse(postfix);
+                            System.out.println("Expressão foi avaliada com sucesso.");
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Expressão inválida.");
+                        }
+                        break;
+                    case 3:
+                        if (tree == null) {
+                            System.out.println("Não há nenhum expressão para ser avaliada.");
+                            break;
+                        }
+
+                        System.out.print("Expressão: ");
+                        tree.traverseInOrder();
+                        System.out.println();
+                        break;
+                    case 4:
+                        if (tree == null) {
+                            System.out.println("Não há nenhum expressão para ser avaliada.");
+                            break;
+                        }
+
+                        double result = tree.calculate();
+
+                        tree.traverseInOrder();
+
+                        if (result % 1 == 0) {
+                            System.out.printf("= %d\n", (int) result);
+                            break;
+                        }
+
+                        System.out.printf(" = %.2f\n", result);
                         break;
                 }
 
