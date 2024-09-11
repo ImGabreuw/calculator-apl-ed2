@@ -6,6 +6,7 @@ import com.github.imgabreuw.token.Token;
 import com.github.imgabreuw.token.number.NumberToken;
 import com.github.imgabreuw.token.operator.DivisionOperatorToken;
 import com.github.imgabreuw.token.operator.MultiplicationOperatorToken;
+import com.github.imgabreuw.token.operator.ParenthesisOperatorToken;
 import com.github.imgabreuw.token.operator.SumOperatorToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,13 +23,15 @@ class BinaryExpressionTreeTest {
     @BeforeEach
     public void setUp() {
         List<Token> tokens = List.of(
-                new NumberToken("5.50"),
+                new NumberToken("5"),
                 new MultiplicationOperatorToken(),
                 new NumberToken("2"),
                 new SumOperatorToken(),
+                new ParenthesisOperatorToken('('),
                 new NumberToken("3"),
                 new SumOperatorToken(),
                 new NumberToken("6"),
+                new ParenthesisOperatorToken(')'),
                 new DivisionOperatorToken(),
                 new NumberToken("3")
         );
@@ -92,6 +95,6 @@ class BinaryExpressionTreeTest {
     @Test
     void testCalculate() {
         double calculate = underTest.calculate();
-        assertEquals(25, calculate);
+        assertEquals(13, calculate);
     }
 }
