@@ -17,8 +17,8 @@ public class OperatorNode extends Node {
     @Override
     public NumberToken visit() {
         return operator.evaluate(
-                left.visit(),
-                right.visit()
+                left != null ? left.visit() : null,
+                right != null ? right.visit() : null
         );
     }
 

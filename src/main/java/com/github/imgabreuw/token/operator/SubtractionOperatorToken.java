@@ -12,7 +12,12 @@ public final class SubtractionOperatorToken extends OperatorToken {
 
     @Override
     public NumberToken evaluate(NumberToken left, NumberToken right) {
+        if (left == null) {
+            return new NumberToken(-right.getValue());
+        }
+
         double result = left.getValue() - right.getValue();
+
         return new NumberToken(result);
     }
 

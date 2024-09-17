@@ -16,15 +16,29 @@ public class Parser {
     public BinaryExpressionTree parse(Deque<Token> tokens) {
         Deque<Node> nodeStack = new LinkedList<>();
 
-        for (Token token : tokens) {
-            if (token instanceof NumberToken numberToken) {
+        while (!tokens.isEmpty()) {
+            Token current = tokens.pop();
+
+            if (current instanceof NumberToken numberToken) {
+                if (tokens.peek() instanceof OperatorToken) {
+                    OperatorToken unaryOperator = (OperatorToken) tokens.pop();
+
+                    nodeStack.push(new OperatorNode(unaryOperator, null, new OperandNode(numberToken)));
+                    continue;
+                }
+
                 nodeStack.push(new OperandNode(numberToken));
                 continue;
             }
 
-            if (token instanceof OperatorToken operatorToken) {
+            if (current instanceof OperatorToken operatorToken) {
+                if (nodeStack.size() < 2) {
+                    continue;
+                }
+
                 Node right = nodeStack.pop();
                 Node left = nodeStack.pop();
+
                 nodeStack.push(new OperatorNode(operatorToken, left, right));
             }
         }

@@ -248,4 +248,37 @@ class LexerTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Unexpected character: =");
     }
+
+    @Test
+    void shouldConvertExpression1() {
+        List<Token> tokens = underTest.tokenize("-9-(-8)");
+        assertThat(tokens)
+                .containsExactly(
+                        new SubtractionOperatorToken(),
+                        new NumberToken("9"),
+                        new SubtractionOperatorToken(),
+                        new ParenthesisOperatorToken('('),
+                        new SubtractionOperatorToken(),
+                        new NumberToken("8"),
+                        new ParenthesisOperatorToken(')')
+                );
+    }
+
+    @Test
+    void shouldConvertExpression2() {
+        List<Token> tokens = underTest.tokenize("-4-(-(-3))");
+        assertThat(tokens)
+                .containsExactly(
+                        new SubtractionOperatorToken(),
+                        new NumberToken("4"),
+                        new SubtractionOperatorToken(),
+                        new ParenthesisOperatorToken('('),
+                        new SubtractionOperatorToken(),
+                        new ParenthesisOperatorToken('('),
+                        new SubtractionOperatorToken(),
+                        new NumberToken("3"),
+                        new ParenthesisOperatorToken(')'),
+                        new ParenthesisOperatorToken(')')
+                );
+    }
 }

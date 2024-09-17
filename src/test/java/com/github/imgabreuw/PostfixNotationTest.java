@@ -236,4 +236,55 @@ class PostfixNotationTest {
                 );
     }
 
+    @Test
+    void shouldConvertWithUnaryOperator1() {
+        List<Token> tokens = Arrays.asList(
+                new SubtractionOperatorToken(),
+                new NumberToken("9"),
+                new SubtractionOperatorToken(),
+                new ParenthesisOperatorToken('('),
+                new SubtractionOperatorToken(),
+                new NumberToken("8"),
+                new ParenthesisOperatorToken(')')
+        );
+
+        Deque<Token> result = underTest.convert(tokens);
+
+        assertThat(result)
+                .containsExactly(
+                        new NumberToken("9"),
+                        new SubtractionOperatorToken(),
+                        new NumberToken("8"),
+                        new SubtractionOperatorToken(),
+                        new SubtractionOperatorToken()
+                );
+    }
+
+    @Test
+    void shouldConvertWithUnaryOperator2() {
+        List<Token> tokens = Arrays.asList(
+                new SubtractionOperatorToken(),
+                new NumberToken("4"),
+                new SubtractionOperatorToken(),
+                new ParenthesisOperatorToken('('),
+                new SubtractionOperatorToken(),
+                new ParenthesisOperatorToken('('),
+                new SubtractionOperatorToken(),
+                new NumberToken("3"),
+                new ParenthesisOperatorToken(')'),
+                new ParenthesisOperatorToken(')')
+        );
+
+        Deque<Token> result = underTest.convert(tokens);
+
+        assertThat(result)
+                .containsExactly(
+                        new NumberToken("4"),
+                        new SubtractionOperatorToken(),
+                        new NumberToken("3"),
+                        new SubtractionOperatorToken(),
+                        new SubtractionOperatorToken(),
+                        new SubtractionOperatorToken()
+                );
+    }
 }
