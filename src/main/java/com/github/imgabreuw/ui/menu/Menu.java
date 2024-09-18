@@ -25,15 +25,14 @@ public class Menu {
             int option;
 
             do {
-                System.out.println("""
-                        -------------------------- MENU --------------------------
-                        1. Entrada da expressão aritmética na notação infixa.
-                        2. Criação da árvore binária de expressão aritmética.
-                        3. Exibição da árvore binária de expressão aritmética.
-                        4. Cálculo da expressão (realizando o percurso da árvore).
-                        5. Encerramento do programa.
-                        ----------------------------------------------------------
-                        """);
+                System.out.println("-------------------------- MENU --------------------------");
+                options
+                        .entrySet()
+                        .stream()
+                        .map(entry -> "%d. %s".formatted(entry.getKey(), entry.getValue().getMessage()))
+                        .forEach(System.out::println);
+                System.out.printf("%d. Encerramento do programa%n", exitOption);
+                System.out.println("----------------------------------------------------------");
 
                 System.out.print("Opção: ");
                 option = readOption(scanner);

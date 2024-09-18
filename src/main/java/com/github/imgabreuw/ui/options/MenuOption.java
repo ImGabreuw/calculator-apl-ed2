@@ -6,5 +6,7 @@ public interface MenuOption {
 
     void execute(Scanner scanner);
 
+    String getMessage();
+
 }
 

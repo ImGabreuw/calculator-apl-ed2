@@ -31,4 +31,9 @@ public class CalculateExpressionOption implements MenuOption {
 
         System.out.printf("= %.2f\n", result);
     }
+
+    @Override
+    public String getMessage() {
+        return "Criação da árvore binária de expressão aritmética.";
+    }
 }

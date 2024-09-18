@@ -45,4 +45,9 @@ public class CreateExpressionTreeOption implements MenuOption {
         }
     }
 
+    @Override
+    public String getMessage() {
+        return "Cálculo da expressão (realizando o percurso da árvore).";
+    }
+
 }

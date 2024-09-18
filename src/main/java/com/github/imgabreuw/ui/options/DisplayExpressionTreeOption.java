@@ -26,4 +26,9 @@ public class DisplayExpressionTreeOption implements MenuOption {
         System.out.println();
     }
 
+    @Override
+    public String getMessage() {
+        return "Exibição da árvore binária de expressão aritmética.";
+    }
+
 }

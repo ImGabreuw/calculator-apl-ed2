@@ -27,4 +27,9 @@ public class InputExpressionOption implements MenuOption {
         }
     }
 
+    @Override
+    public String getMessage() {
+        return "Entrada da expressão aritmética na notação infixa.";
+    }
+
 }
