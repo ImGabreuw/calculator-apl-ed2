@@ -13,15 +13,15 @@ public class Lexer {
 
     private final List<TokenProcessor> pipeline;
 
-    public List<Token> tokenize(String input) {
+    public List<Token> tokenize(String expression) {
         List<Token> tokens = new ArrayList<>();
-        int[] index = {0};
+        Input input = new Input(expression);
 
-        while (index[0] < input.length()) {
+        while (input.getPosition() < expression.length()) {
             Token token = null;
 
             for (TokenProcessor processor : pipeline) {
-                token = processor.process(input, index);
+                token = processor.process(input);
 
                 // try to tokenize using the next processor
                 if (token == null) continue;
@@ -32,7 +32,7 @@ public class Lexer {
             }
 
             if (token == null) {
-                throw new IllegalArgumentException("Unexpected character: " + input.charAt(index[0]));
+                throw new IllegalArgumentException("Unexpected character: " + expression.charAt(input.getPosition()));
             }
         }
 

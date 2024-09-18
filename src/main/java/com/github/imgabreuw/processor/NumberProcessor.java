@@ -1,26 +1,27 @@
 package com.github.imgabreuw.processor;
 
+import com.github.imgabreuw.Input;
 import com.github.imgabreuw.token.number.NumberToken;
 import com.github.imgabreuw.token.Token;
 
 public class NumberProcessor implements TokenProcessor {
 
     @Override
-    public Token process(String input, int[] index) {
+    public Token process(Input input) {
         StringBuilder sb = new StringBuilder();
         boolean hasDecimalSeparator = false;
 
-        while (index[0] < input.length()) {
-            char c = input.charAt(index[0]);
+        while (input.hasNext()) {
+            char currentCharacter = input.getCurrentCharacter();
 
             // Process digits and decimal separators
-            if (Character.isDigit(c)) {
-                sb.append(c);
-                index[0]++;
+            if (Character.isDigit(currentCharacter)) {
+                sb.append(currentCharacter);
+                input.next();
                 continue;
             }
 
-            if (isDecimalSeparator(c)) {
+            if (isDecimalSeparator(currentCharacter)) {
                 if (hasDecimalSeparator) {
                     // More than one decimal separator is invalid
                     return null;
@@ -28,7 +29,7 @@ public class NumberProcessor implements TokenProcessor {
 
                 hasDecimalSeparator = true;
                 sb.append('.');
-                index[0]++;
+                input.next();
                 continue;
             }
 
