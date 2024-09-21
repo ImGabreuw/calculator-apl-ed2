@@ -1,9 +1,10 @@
 package com.github.imgabreuw;
 
-import com.github.imgabreuw.token.number.NumberToken;
-import com.github.imgabreuw.token.OperatorToken;
 import com.github.imgabreuw.token.Token;
-import com.github.imgabreuw.token.operator.ParenthesisOperatorToken;
+import com.github.imgabreuw.token.number.NumberToken;
+import com.github.imgabreuw.token.operator.binary.BinaryOperatorToken;
+import com.github.imgabreuw.token.operator.binary.ParenthesisBinaryOperatorToken;
+import com.github.imgabreuw.token.operator.unary.UnaryOperatorToken;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -13,18 +14,16 @@ public class PostfixNotation {
 
     public Deque<Token> convert(List<Token> infix) {
         Deque<Token> outputQueue = new LinkedList<>();
-        Deque<OperatorToken> operators = new LinkedList<>();
+        Deque<Token> operators = new LinkedList<>();
 
         for (Token token : infix) {
             if (token instanceof NumberToken) {
-                // Números vão diretamente para a fila de saída
                 outputQueue.add(token);
                 continue;
             }
 
-            if (token instanceof ParenthesisOperatorToken pToken) {
+            if (token instanceof ParenthesisBinaryOperatorToken pToken) {
                 if (pToken.isOpening()) {
-                    // Parêntese aberto é empilhado
                     operators.push(null);  // Indica parêntese aberto
                     continue;
                 }
@@ -42,23 +41,33 @@ public class PostfixNotation {
                 continue;
             }
 
-            if (token instanceof OperatorToken o1) {
-                // Desempilha operadores de maior ou igual precedência
-                while (!operators.isEmpty() && operators.peek() != null) {
-                    OperatorToken o2 = operators.peek();
-                    boolean isLeftAssociative = o1.getAssociative().isLeft() && o1.getPrecedence() <= o2.getPrecedence();
-                    boolean isRightAssociative = o1.getAssociative().isRight() && o1.getPrecedence() < o2.getPrecedence();
-
-                    if (!isLeftAssociative && !isRightAssociative) {
-                        break;
-                    }
-
-                    outputQueue.add(operators.pop());
-                }
-
-                operators.push(o1);  // Empilha o operador atual
+            if (token instanceof UnaryOperatorToken uToken) {
+                operators.push(uToken);
+                continue;
             }
 
+            if (token instanceof BinaryOperatorToken bToken) {
+                // Desempilha operadores com precedência maior ou igual
+                while (!operators.isEmpty()) {
+                    Token topOperator = operators.peek();
+                    if (topOperator instanceof BinaryOperatorToken op) {
+                        boolean isLeftAssociative = bToken.getAssociative().isLeft() && bToken.getPrecedence() <= op.getPrecedence();
+                        boolean isRightAssociative = bToken.getAssociative().isRight() && bToken.getPrecedence() < op.getPrecedence();
+
+                        if (!isLeftAssociative && !isRightAssociative) {
+                            break;
+                        }
+
+                        outputQueue.add(operators.pop());
+                    } else if (topOperator instanceof UnaryOperatorToken) {
+                        outputQueue.add(operators.pop());
+                    } else {
+                        break;
+                    }
+                }
+
+                operators.push(bToken);
+            }
         }
 
         while (!operators.isEmpty()) {

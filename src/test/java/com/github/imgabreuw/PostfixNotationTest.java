@@ -1,9 +1,9 @@
 package com.github.imgabreuw;
 
 import com.github.imgabreuw.token.number.NumberToken;
-import com.github.imgabreuw.token.operator.*;
-import com.github.imgabreuw.token.operator.ParenthesisOperatorToken;
+import com.github.imgabreuw.token.operator.binary.*;
 import com.github.imgabreuw.token.Token;
+import com.github.imgabreuw.token.operator.unary.NegativeOperatorToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +26,7 @@ class PostfixNotationTest {
     void testSimpleExpression() {
         List<Token> tokens = Arrays.asList(
                 new NumberToken("1"),
-                new SumOperatorToken(),
+                new SumBinaryOperatorToken(),
                 new NumberToken("2")
         );
 
@@ -36,7 +36,7 @@ class PostfixNotationTest {
                 .containsExactly(
                         new NumberToken("1"),
                         new NumberToken("2"),
-                        new SumOperatorToken()
+                        new SumBinaryOperatorToken()
                 );
     }
 
@@ -44,13 +44,13 @@ class PostfixNotationTest {
     void testExpressionWithMultipleOperators() {
         List<Token> tokens = Arrays.asList(
                 new NumberToken("1"),
-                new SumOperatorToken(),
+                new SumBinaryOperatorToken(),
                 new NumberToken("2"),
-                new SubtractionOperatorToken(),
+                new SubtractionBinaryOperatorToken(),
                 new NumberToken("3"),
-                new MultiplicationOperatorToken(),
+                new MultiplicationBinaryOperatorToken(),
                 new NumberToken("4"),
-                new DivisionOperatorToken(),
+                new DivisionBinaryOperatorToken(),
                 new NumberToken("5")
         );
 
@@ -60,25 +60,25 @@ class PostfixNotationTest {
                 .containsExactly(
                         new NumberToken("1"),
                         new NumberToken("2"),
-                        new SumOperatorToken(),
+                        new SumBinaryOperatorToken(),
                         new NumberToken("3"),
                         new NumberToken("4"),
-                        new MultiplicationOperatorToken(),
+                        new MultiplicationBinaryOperatorToken(),
                         new NumberToken("5"),
-                        new DivisionOperatorToken(),
-                        new SubtractionOperatorToken()
+                        new DivisionBinaryOperatorToken(),
+                        new SubtractionBinaryOperatorToken()
                 );
     }
 
     @Test
     void testExpressionWithParentheses() {
         List<Token> tokens = Arrays.asList(
-                new ParenthesisOperatorToken('('),
+                new ParenthesisBinaryOperatorToken('('),
                 new NumberToken("3"),
-                new SumOperatorToken(),
+                new SumBinaryOperatorToken(),
                 new NumberToken("4"),
-                new ParenthesisOperatorToken(')'),
-                new MultiplicationOperatorToken(),
+                new ParenthesisBinaryOperatorToken(')'),
+                new MultiplicationBinaryOperatorToken(),
                 new NumberToken("5")
         );
 
@@ -88,9 +88,9 @@ class PostfixNotationTest {
                 .containsExactly(
                         new NumberToken("3"),
                         new NumberToken("4"),
-                        new SumOperatorToken(),
+                        new SumBinaryOperatorToken(),
                         new NumberToken("5"),
-                        new MultiplicationOperatorToken()
+                        new MultiplicationBinaryOperatorToken()
                 );
     }
 
@@ -98,15 +98,15 @@ class PostfixNotationTest {
     void testComplexExpression() {
         List<Token> tokens = Arrays.asList(
                 new NumberToken("10"),
-                new SumOperatorToken(),
-                new ParenthesisOperatorToken('('),
+                new SumBinaryOperatorToken(),
+                new ParenthesisBinaryOperatorToken('('),
                 new NumberToken("2"),
-                new MultiplicationOperatorToken(),
+                new MultiplicationBinaryOperatorToken(),
                 new NumberToken("3"),
-                new ParenthesisOperatorToken(')'),
-                new SubtractionOperatorToken(),
+                new ParenthesisBinaryOperatorToken(')'),
+                new SubtractionBinaryOperatorToken(),
                 new NumberToken("7"),
-                new DivisionOperatorToken(),
+                new DivisionBinaryOperatorToken(),
                 new NumberToken("1.5")
         );
 
@@ -117,12 +117,12 @@ class PostfixNotationTest {
                         new NumberToken("10"),
                         new NumberToken("2"),
                         new NumberToken("3"),
-                        new MultiplicationOperatorToken(),
-                        new SumOperatorToken(),
+                        new MultiplicationBinaryOperatorToken(),
+                        new SumBinaryOperatorToken(),
                         new NumberToken("7"),
                         new NumberToken("1.5"),
-                        new DivisionOperatorToken(),
-                        new SubtractionOperatorToken()
+                        new DivisionBinaryOperatorToken(),
+                        new SubtractionBinaryOperatorToken()
                 );
     }
 
@@ -130,7 +130,7 @@ class PostfixNotationTest {
     void testExpressionWithDecimalNumbers() {
         List<Token> tokens = Arrays.asList(
                 new NumberToken("3.14"),
-                new SumOperatorToken(),
+                new SumBinaryOperatorToken(),
                 new NumberToken("2.71")
         );
 
@@ -140,7 +140,7 @@ class PostfixNotationTest {
                 .containsExactly(
                         new NumberToken("3.14"),
                         new NumberToken("2.71"),
-                        new SumOperatorToken()
+                        new SumBinaryOperatorToken()
                 );
     }
 
@@ -148,14 +148,14 @@ class PostfixNotationTest {
     void testExpressionWithSpaces() {
         List<Token> tokens = Arrays.asList(
                 new NumberToken("12"),
-                new SumOperatorToken(),
+                new SumBinaryOperatorToken(),
                 new NumberToken("4"),
-                new MultiplicationOperatorToken(),
-                new ParenthesisOperatorToken('('),
+                new MultiplicationBinaryOperatorToken(),
+                new ParenthesisBinaryOperatorToken('('),
                 new NumberToken("3"),
-                new SubtractionOperatorToken(),
+                new SubtractionBinaryOperatorToken(),
                 new NumberToken("1"),
-                new ParenthesisOperatorToken(')')
+                new ParenthesisBinaryOperatorToken(')')
         );
 
         Deque<Token> result = underTest.convert(tokens);
@@ -166,30 +166,30 @@ class PostfixNotationTest {
                         new NumberToken("4"),
                         new NumberToken("3"),
                         new NumberToken("1"),
-                        new SubtractionOperatorToken(),
-                        new MultiplicationOperatorToken(),
-                        new SumOperatorToken()
+                        new SubtractionBinaryOperatorToken(),
+                        new MultiplicationBinaryOperatorToken(),
+                        new SumBinaryOperatorToken()
                 );
     }
 
     @Test
     void testNestedParentheses() {
         List<Token> tokens = Arrays.asList(
-                new ParenthesisOperatorToken('('),
-                new ParenthesisOperatorToken('('),
+                new ParenthesisBinaryOperatorToken('('),
+                new ParenthesisBinaryOperatorToken('('),
                 new NumberToken("1"),
-                new SumOperatorToken(),
+                new SumBinaryOperatorToken(),
                 new NumberToken("2"),
-                new ParenthesisOperatorToken(')'),
-                new MultiplicationOperatorToken(),
+                new ParenthesisBinaryOperatorToken(')'),
+                new MultiplicationBinaryOperatorToken(),
                 new NumberToken("3"),
-                new ParenthesisOperatorToken(')'),
-                new DivisionOperatorToken(),
-                new ParenthesisOperatorToken('('),
+                new ParenthesisBinaryOperatorToken(')'),
+                new DivisionBinaryOperatorToken(),
+                new ParenthesisBinaryOperatorToken('('),
                 new NumberToken("4"),
-                new SubtractionOperatorToken(),
+                new SubtractionBinaryOperatorToken(),
                 new NumberToken("5"),
-                new ParenthesisOperatorToken(')')
+                new ParenthesisBinaryOperatorToken(')')
         );
 
         Deque<Token> result = underTest.convert(tokens);
@@ -198,13 +198,13 @@ class PostfixNotationTest {
                 .containsExactly(
                         new NumberToken("1"),
                         new NumberToken("2"),
-                        new SumOperatorToken(),
+                        new SumBinaryOperatorToken(),
                         new NumberToken("3"),
-                        new MultiplicationOperatorToken(),
+                        new MultiplicationBinaryOperatorToken(),
                         new NumberToken("4"),
                         new NumberToken("5"),
-                        new SubtractionOperatorToken(),
-                        new DivisionOperatorToken()
+                        new SubtractionBinaryOperatorToken(),
+                        new DivisionBinaryOperatorToken()
                 );
     }
 
@@ -212,14 +212,14 @@ class PostfixNotationTest {
     void testExpressionWithMultipleSpaces() {
         List<Token> tokens = Arrays.asList(
                 new NumberToken("1"),
-                new SumOperatorToken(),
+                new SumBinaryOperatorToken(),
                 new NumberToken("2"),
-                new MultiplicationOperatorToken(),
-                new ParenthesisOperatorToken('('),
+                new MultiplicationBinaryOperatorToken(),
+                new ParenthesisBinaryOperatorToken('('),
                 new NumberToken("3"),
-                new SubtractionOperatorToken(),
+                new SubtractionBinaryOperatorToken(),
                 new NumberToken("4"),
-                new ParenthesisOperatorToken(')')
+                new ParenthesisBinaryOperatorToken(')')
         );
 
         Deque<Token> result = underTest.convert(tokens);
@@ -230,22 +230,22 @@ class PostfixNotationTest {
                         new NumberToken("2"),
                         new NumberToken("3"),
                         new NumberToken("4"),
-                        new SubtractionOperatorToken(),
-                        new MultiplicationOperatorToken(),
-                        new SumOperatorToken()
+                        new SubtractionBinaryOperatorToken(),
+                        new MultiplicationBinaryOperatorToken(),
+                        new SumBinaryOperatorToken()
                 );
     }
 
     @Test
     void shouldConvertWithUnaryOperator1() {
         List<Token> tokens = Arrays.asList(
-                new SubtractionOperatorToken(),
+                new NegativeOperatorToken(),
                 new NumberToken("9"),
-                new SubtractionOperatorToken(),
-                new ParenthesisOperatorToken('('),
-                new SubtractionOperatorToken(),
+                new SubtractionBinaryOperatorToken(),
+                new ParenthesisBinaryOperatorToken('('),
+                new NegativeOperatorToken(),
                 new NumberToken("8"),
-                new ParenthesisOperatorToken(')')
+                new ParenthesisBinaryOperatorToken(')')
         );
 
         Deque<Token> result = underTest.convert(tokens);
@@ -253,26 +253,26 @@ class PostfixNotationTest {
         assertThat(result)
                 .containsExactly(
                         new NumberToken("9"),
-                        new SubtractionOperatorToken(),
+                        new NegativeOperatorToken(),
                         new NumberToken("8"),
-                        new SubtractionOperatorToken(),
-                        new SubtractionOperatorToken()
+                        new NegativeOperatorToken(),
+                        new SubtractionBinaryOperatorToken()
                 );
     }
 
     @Test
     void shouldConvertWithUnaryOperator2() {
         List<Token> tokens = Arrays.asList(
-                new SubtractionOperatorToken(),
+                new NegativeOperatorToken(),
                 new NumberToken("4"),
-                new SubtractionOperatorToken(),
-                new ParenthesisOperatorToken('('),
-                new SubtractionOperatorToken(),
-                new ParenthesisOperatorToken('('),
-                new SubtractionOperatorToken(),
+                new SubtractionBinaryOperatorToken(),
+                new ParenthesisBinaryOperatorToken('('),
+                new NegativeOperatorToken(),
+                new ParenthesisBinaryOperatorToken('('),
+                new NegativeOperatorToken(),
                 new NumberToken("3"),
-                new ParenthesisOperatorToken(')'),
-                new ParenthesisOperatorToken(')')
+                new ParenthesisBinaryOperatorToken(')'),
+                new ParenthesisBinaryOperatorToken(')')
         );
 
         Deque<Token> result = underTest.convert(tokens);
@@ -280,11 +280,11 @@ class PostfixNotationTest {
         assertThat(result)
                 .containsExactly(
                         new NumberToken("4"),
-                        new SubtractionOperatorToken(),
+                        new NegativeOperatorToken(),
                         new NumberToken("3"),
-                        new SubtractionOperatorToken(),
-                        new SubtractionOperatorToken(),
-                        new SubtractionOperatorToken()
+                        new NegativeOperatorToken(),
+                        new NegativeOperatorToken(),
+                        new SubtractionBinaryOperatorToken()
                 );
     }
 }

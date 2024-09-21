@@ -2,7 +2,7 @@ package com.github.imgabreuw.processor;
 
 import com.github.imgabreuw.Input;
 import com.github.imgabreuw.token.Token;
-import com.github.imgabreuw.token.operator.DivisionOperatorToken;
+import com.github.imgabreuw.token.operator.binary.DivisionBinaryOperatorToken;
 
 public class DivisionOperatorProcessor implements TokenProcessor {
 
@@ -15,7 +15,7 @@ public class DivisionOperatorProcessor implements TokenProcessor {
         }
 
         input.next();
-        return new DivisionOperatorToken();
+        return new DivisionBinaryOperatorToken();
     }
 
 }

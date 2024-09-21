@@ -1,12 +1,11 @@
-package com.github.imgabreuw.token.operator;
+package com.github.imgabreuw.token.operator.binary;
 
 import com.github.imgabreuw.token.AssociativeType;
 import com.github.imgabreuw.token.number.NumberToken;
-import com.github.imgabreuw.token.OperatorToken;
 
-public final class SumOperatorToken extends OperatorToken {
+public final class SumBinaryOperatorToken extends BinaryOperatorToken {
 
-    public SumOperatorToken() {
+    public SumBinaryOperatorToken() {
         super('+');
     }
 

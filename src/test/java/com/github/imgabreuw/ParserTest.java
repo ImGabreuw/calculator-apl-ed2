@@ -2,7 +2,8 @@ package com.github.imgabreuw;
 
 import com.github.imgabreuw.token.Token;
 import com.github.imgabreuw.token.number.NumberToken;
-import com.github.imgabreuw.token.operator.SubtractionOperatorToken;
+import com.github.imgabreuw.token.operator.binary.SubtractionBinaryOperatorToken;
+import com.github.imgabreuw.token.operator.unary.NegativeOperatorToken;
 import com.github.imgabreuw.tree.BinaryExpressionTree;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,10 +25,10 @@ class ParserTest {
     void shouldParseWithUnaryOperator1() {
         Deque<Token> tokens = new LinkedList<>(List.of(
                 new NumberToken("9"),
-                new SubtractionOperatorToken(),
+                new NegativeOperatorToken(),
                 new NumberToken("8"),
-                new SubtractionOperatorToken(),
-                new SubtractionOperatorToken()
+                new NegativeOperatorToken(),
+                new SubtractionBinaryOperatorToken()
         ));
 
         BinaryExpressionTree tree = underTest.parse(tokens);
@@ -39,11 +40,11 @@ class ParserTest {
     void shouldParseWithUnaryOperator2() {
         Deque<Token> tokens = new LinkedList<>(List.of(
                 new NumberToken("4"),
-                new SubtractionOperatorToken(),
+                new NegativeOperatorToken(),
                 new NumberToken("3"),
-                new SubtractionOperatorToken(),
-                new SubtractionOperatorToken(),
-                new SubtractionOperatorToken()
+                new NegativeOperatorToken(),
+                new NegativeOperatorToken(),
+                new SubtractionBinaryOperatorToken()
         ));
 
         BinaryExpressionTree tree = underTest.parse(tokens);

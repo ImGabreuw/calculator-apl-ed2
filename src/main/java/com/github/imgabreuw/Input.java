@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Input {
 
-    private final String expression;
+    private String expression;
 
     private int position = 0;
 
@@ -25,6 +25,15 @@ public class Input {
 
     public char getCurrentCharacter() {
         return expression.charAt(position);
+    }
+
+    public void setExpression(String expression) {
+        if (expression == null || expression.isEmpty()) {
+            this.expression = "";
+            return;
+        }
+
+        this.expression = expression;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.github.imgabreuw;
 
-import com.github.imgabreuw.token.OperatorToken;
+import com.github.imgabreuw.token.operator.binary.BinaryOperatorToken;
+import com.github.imgabreuw.token.operator.unary.UnaryOperatorToken;
 import com.github.imgabreuw.token.Token;
 import com.github.imgabreuw.token.number.NumberToken;
 import com.github.imgabreuw.tree.BinaryExpressionTree;
@@ -20,27 +21,34 @@ public class Parser {
             Token current = tokens.pop();
 
             if (current instanceof NumberToken numberToken) {
-                if (tokens.peek() instanceof OperatorToken) {
-                    OperatorToken unaryOperator = (OperatorToken) tokens.pop();
-
-                    nodeStack.push(new OperatorNode(unaryOperator, null, new OperandNode(numberToken)));
-                    continue;
-                }
-
                 nodeStack.push(new OperandNode(numberToken));
                 continue;
             }
 
-            if (current instanceof OperatorToken operatorToken) {
+            if (current instanceof UnaryOperatorToken unaryOperatorToken) {
+                if (nodeStack.isEmpty()) {
+                    throw new IllegalArgumentException("Faltando operando para o operador unário");
+                }
+
+                Node operand = nodeStack.pop();
+                nodeStack.push(new OperatorNode(unaryOperatorToken, null, operand));
+                continue;
+            }
+
+            if (current instanceof BinaryOperatorToken binaryOperatorToken) {
                 if (nodeStack.size() < 2) {
-                    continue;
+                    throw new IllegalArgumentException("Faltando operandos para o operador binário");
                 }
 
                 Node right = nodeStack.pop();
                 Node left = nodeStack.pop();
 
-                nodeStack.push(new OperatorNode(operatorToken, left, right));
+                nodeStack.push(new OperatorNode(binaryOperatorToken, left, right));
             }
+        }
+
+        if (nodeStack.size() != 1) {
+            throw new IllegalArgumentException("Expressão inválida");
         }
 
         Node root = nodeStack.pop();

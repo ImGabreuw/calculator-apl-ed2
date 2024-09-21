@@ -29,6 +29,7 @@ public class Menu {
                 options
                         .entrySet()
                         .stream()
+                        .sorted(Map.Entry.comparingByKey())
                         .map(entry -> "%d. %s".formatted(entry.getKey(), entry.getValue().getMessage()))
                         .forEach(System.out::println);
                 System.out.printf("%d. Encerramento do programa%n", exitOption);

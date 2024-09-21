@@ -2,7 +2,7 @@ package com.github.imgabreuw.processor;
 
 import com.github.imgabreuw.Input;
 import com.github.imgabreuw.token.Token;
-import com.github.imgabreuw.token.operator.SumOperatorToken;
+import com.github.imgabreuw.token.operator.binary.SumBinaryOperatorToken;
 
 public class SumOperatorProcessor implements TokenProcessor {
 
@@ -15,7 +15,7 @@ public class SumOperatorProcessor implements TokenProcessor {
         }
 
         input.next();
-        return new SumOperatorToken();
+        return new SumBinaryOperatorToken();
     }
 
 }

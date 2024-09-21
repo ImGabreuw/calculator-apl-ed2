@@ -17,6 +17,7 @@ public class Main {
                 new SubtractionOperatorProcessor(),
                 new MultiplicationOperatorProcessor(),
                 new DivisionOperatorProcessor(),
+                new NegativeOperatorProcessor(),
                 new NumberProcessor()
         );
 

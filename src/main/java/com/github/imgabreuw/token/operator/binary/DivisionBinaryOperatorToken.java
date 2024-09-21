@@ -1,29 +1,29 @@
-package com.github.imgabreuw.token.operator;
+package com.github.imgabreuw.token.operator.binary;
 
 import com.github.imgabreuw.token.AssociativeType;
 import com.github.imgabreuw.token.number.NumberToken;
-import com.github.imgabreuw.token.OperatorToken;
 
-public final class SubtractionOperatorToken extends OperatorToken {
+public final class DivisionBinaryOperatorToken extends BinaryOperatorToken {
 
-    public SubtractionOperatorToken() {
-        super('-');
+    public DivisionBinaryOperatorToken() {
+        super('/');
     }
 
     @Override
     public NumberToken evaluate(NumberToken left, NumberToken right) {
-        if (left == null) {
-            return new NumberToken(-right.getValue());
+        double rightValue = right.getValue();
+
+        if (rightValue == 0) {
+            throw new IllegalArgumentException("Denominator cannot be 0.");
         }
 
-        double result = left.getValue() - right.getValue();
-
+        double result = left.getValue() / rightValue;
         return new NumberToken(result);
     }
 
     @Override
     public int getPrecedence() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -33,7 +33,7 @@ public final class SubtractionOperatorToken extends OperatorToken {
 
     @Override
     public String getType() {
-        return "Subtraction";
+        return "Division";
     }
 
 }

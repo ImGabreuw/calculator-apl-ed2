@@ -1,24 +1,17 @@
-package com.github.imgabreuw.token.operator;
+package com.github.imgabreuw.token.operator.binary;
 
 import com.github.imgabreuw.token.AssociativeType;
 import com.github.imgabreuw.token.number.NumberToken;
-import com.github.imgabreuw.token.OperatorToken;
 
-public final class DivisionOperatorToken extends OperatorToken {
+public final class MultiplicationBinaryOperatorToken extends BinaryOperatorToken {
 
-    public DivisionOperatorToken() {
-        super('/');
+    public MultiplicationBinaryOperatorToken() {
+        super('*');
     }
 
     @Override
     public NumberToken evaluate(NumberToken left, NumberToken right) {
-        double rightValue = right.getValue();
-
-        if (rightValue == 0) {
-            throw new IllegalArgumentException("Denominator cannot be 0.");
-        }
-
-        double result = left.getValue() / rightValue;
+        double result = left.getValue() * right.getValue();
         return new NumberToken(result);
     }
 
@@ -34,7 +27,7 @@ public final class DivisionOperatorToken extends OperatorToken {
 
     @Override
     public String getType() {
-        return "Division";
+        return "Multiplication";
     }
 
 }

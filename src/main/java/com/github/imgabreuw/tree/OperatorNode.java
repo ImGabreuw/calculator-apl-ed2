@@ -1,7 +1,9 @@
 package com.github.imgabreuw.tree;
 
-import com.github.imgabreuw.token.OperatorToken;
+import com.github.imgabreuw.token.Token;
+import com.github.imgabreuw.token.operator.binary.BinaryOperatorToken;
 import com.github.imgabreuw.token.number.NumberToken;
+import com.github.imgabreuw.token.operator.unary.UnaryOperatorToken;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,17 +11,25 @@ import lombok.EqualsAndHashCode;
 @Data
 public class OperatorNode extends Node {
 
-    private final OperatorToken operator;
+    private final Token operator;
 
     private final Node left;
     private final Node right;
 
     @Override
     public NumberToken visit() {
-        return operator.evaluate(
-                left != null ? left.visit() : null,
-                right != null ? right.visit() : null
-        );
+        if (operator instanceof BinaryOperatorToken bToken) {
+            return bToken.evaluate(
+                    left != null ? left.visit() : null,
+                    right != null ? right.visit() : null
+            );
+        }
+
+        if (operator instanceof UnaryOperatorToken uToken) {
+            return uToken.evaluate(right != null ? right.visit() : null);
+        }
+
+        throw new IllegalArgumentException("Unsupported operator: " + operator);
     }
 
     @Override
@@ -50,7 +60,7 @@ public class OperatorNode extends Node {
     }
 
     @Override
-    public OperatorToken getValue() {
+    public Token getValue() {
         return operator;
     }
 
@@ -66,7 +76,15 @@ public class OperatorNode extends Node {
 
     @Override
     public String toString() {
-        return "%s".formatted(operator.getOperator());
+        if (operator instanceof BinaryOperatorToken bToken) {
+            return "%s".formatted(bToken.getOperator());
+        }
+
+        if (operator instanceof UnaryOperatorToken unaryToken) {
+            return "%s".formatted(unaryToken.getOperator());
+        }
+
+        throw new IllegalArgumentException("Unsupported operator: " + operator);
     }
 
     public boolean isLeaf() {

@@ -2,7 +2,7 @@ package com.github.imgabreuw.processor;
 
 import com.github.imgabreuw.Input;
 import com.github.imgabreuw.token.Token;
-import com.github.imgabreuw.token.operator.MultiplicationOperatorToken;
+import com.github.imgabreuw.token.operator.binary.MultiplicationBinaryOperatorToken;
 
 public class MultiplicationOperatorProcessor implements TokenProcessor {
 
@@ -15,7 +15,7 @@ public class MultiplicationOperatorProcessor implements TokenProcessor {
         }
 
         input.next();
-        return new MultiplicationOperatorToken();
+        return new MultiplicationBinaryOperatorToken();
     }
 
 }
