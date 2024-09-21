@@ -1,5 +1,6 @@
 package com.github.imgabreuw.tree;
 
+import com.github.imgabreuw.token.operator.binary.BinaryOperatorToken;
 import lombok.*;
 
 import java.util.LinkedList;
@@ -55,15 +56,53 @@ public class BinaryExpressionTree {
         if (node == null) return;
 
         if (node instanceof OperatorNode operatorNode) {
-            traverseInOrder(operatorNode.getLeft());
-        }
+            boolean isUnary = operatorNode.getLeft() == null;
 
-        System.out.print(node + " ");
+            if (isUnary) {
+                // Se for unário, imprime o operador antes do operando (sem espaço)
+                System.out.print(operatorNode);
+                traverseInOrder(operatorNode.getRight());
+            } else {
+                boolean needsParenthesesLeft = needsParentheses(operatorNode.getLeft(), operatorNode);
+                if (needsParenthesesLeft) {
+                    System.out.print("(");
+                }
 
-        if (node instanceof OperatorNode operatorNode) {
-            traverseInOrder(operatorNode.getRight());
+                traverseInOrder(operatorNode.getLeft());
+
+                boolean needsParenthesesRight = needsParentheses(operatorNode.getRight(), operatorNode);
+                if (needsParenthesesLeft) {
+                    System.out.print(")");
+                }
+
+                System.out.print(" " + operatorNode + " ");
+
+                if (needsParenthesesRight) {
+                    System.out.print("(");
+                }
+
+                traverseInOrder(operatorNode.getRight());
+
+                if (needsParenthesesRight) {
+                    System.out.print(")");
+                }
+            }
+        } else if (node instanceof OperandNode) {
+            System.out.print(node);  // Não imprime espaço ao final de operandos
         }
     }
+
+    private boolean needsParentheses(Node child, OperatorNode parentOperator) {
+        if (child instanceof OperatorNode childOperator) {
+            if (childOperator.getOperator() instanceof BinaryOperatorToken bTokenChild
+                    && parentOperator.getOperator() instanceof BinaryOperatorToken bTokenParent) {
+                return bTokenChild.getPrecedence() < bTokenParent.getPrecedence();
+            }
+
+        }
+        return false;
+    }
+
 
     public void traversePostOrder() {
         traversePostOrder(root);

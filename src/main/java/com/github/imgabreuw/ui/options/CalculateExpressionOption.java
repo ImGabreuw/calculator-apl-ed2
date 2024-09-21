@@ -25,11 +25,11 @@ public class CalculateExpressionOption implements MenuOption {
         tree.traverseInOrder();
 
         if (result % 1 == 0) {
-            System.out.printf("= %d\n", (int) result);
+            System.out.printf(" = %d\n", (int) result);
             return;
         }
 
-        System.out.printf("= %.2f\n", result);
+        System.out.printf(" = %.2f\n", result);
     }
 
     @Override
