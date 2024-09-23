@@ -9,10 +9,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Código fonte: <a href="https://github.com/ImGabreuw/expression-tree">Expression Tree</a>
+ * <br><br>
  * Integrantes:
- * Enzo Ribeiro                 - 10418262
- * Gabriel Ken Kazama Geronazzo - 10418247
- * Lucas Zanini da Silva        - 10417361
+ * <ul>
+ *     <li>Enzo Ribeiro                 - 10418262</li>
+ *     <li>Gabriel Ken Kazama Geronazzo - 10418247</li>
+ *     <li>Lucas Zanini da Silva        - 10417361</li>
+ * </ul>
  */
 public class Main {
 
