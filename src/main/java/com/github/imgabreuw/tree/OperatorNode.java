@@ -7,6 +7,12 @@ import com.github.imgabreuw.token.operator.unary.UnaryOperatorToken;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * References: <br>
+ * <ul>
+ *     <li><a href="https://refactoring.guru/design-patterns/visitor">Visitor Design Pattern</a></li>
+ * </ul>
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class OperatorNode extends Node {

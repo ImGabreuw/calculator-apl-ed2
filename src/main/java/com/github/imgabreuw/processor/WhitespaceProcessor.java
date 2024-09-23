@@ -1,6 +1,6 @@
 package com.github.imgabreuw.processor;
 
-import com.github.imgabreuw.Input;
+import com.github.imgabreuw.helpers.Input;
 import com.github.imgabreuw.token.NullToken;
 import com.github.imgabreuw.token.Token;
 

@@ -1,5 +1,7 @@
 package com.github.imgabreuw;
 
+import com.github.imgabreuw.helpers.Input;
+import com.github.imgabreuw.helpers.StringHelper;
 import com.github.imgabreuw.processor.TokenProcessor;
 import com.github.imgabreuw.token.NullToken;
 import com.github.imgabreuw.token.Token;
@@ -14,6 +16,14 @@ public class Lexer {
     private final List<TokenProcessor> pipeline;
 
     public List<Token> tokenize(String expression) {
+        if (expression == null) {
+            throw new IllegalArgumentException("expression cannot be null");
+        }
+
+        if (!StringHelper.isParenthesisBalanced(expression)) {
+            throw new IllegalArgumentException("expression must be balanced");
+        }
+
         List<Token> tokens = new ArrayList<>();
         Input input = new Input(expression);
 

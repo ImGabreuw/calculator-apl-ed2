@@ -1,5 +1,6 @@
 package com.github.imgabreuw;
 
+import com.github.imgabreuw.helpers.PostfixNotation;
 import com.github.imgabreuw.processor.*;
 import com.github.imgabreuw.ui.menu.Menu;
 import com.github.imgabreuw.ui.options.*;
@@ -7,6 +8,12 @@ import com.github.imgabreuw.ui.options.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Integrantes:
+ * Enzo Ribeiro                 - 10418262
+ * Gabriel Ken Kazama Geronazzo - 10418247
+ * Lucas Zanini da Silva        - 10417361
+ */
 public class Main {
 
     public static void main(String[] args) {

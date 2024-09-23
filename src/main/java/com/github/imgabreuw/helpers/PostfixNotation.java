@@ -1,4 +1,4 @@
-package com.github.imgabreuw;
+package com.github.imgabreuw.helpers;
 
 import com.github.imgabreuw.token.Token;
 import com.github.imgabreuw.token.number.NumberToken;
@@ -10,6 +10,12 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * References: <br>
+ * <ul>
+ *     <li><a href="https://github.com/ImGabreuw/math-expression-evaluator/blob/master/src/main/java/Parser.java">Postfix Notion Parser</a></li>
+ * </ul>
+ */
 public class PostfixNotation {
 
     public Deque<Token> convert(List<Token> infix) {

@@ -1,7 +1,7 @@
 package com.github.imgabreuw.ui.options;
 
 import com.github.imgabreuw.Parser;
-import com.github.imgabreuw.PostfixNotation;
+import com.github.imgabreuw.helpers.PostfixNotation;
 import com.github.imgabreuw.token.Token;
 import com.github.imgabreuw.tree.BinaryExpressionTree;
 import lombok.Data;

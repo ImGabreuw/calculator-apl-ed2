@@ -1,7 +1,7 @@
 package com.github.imgabreuw.tree;
 
 import com.github.imgabreuw.Parser;
-import com.github.imgabreuw.PostfixNotation;
+import com.github.imgabreuw.helpers.PostfixNotation;
 import com.github.imgabreuw.token.Token;
 import com.github.imgabreuw.token.number.NumberToken;
 import com.github.imgabreuw.token.operator.binary.DivisionBinaryOperatorToken;

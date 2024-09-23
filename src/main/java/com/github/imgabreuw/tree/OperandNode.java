@@ -4,6 +4,12 @@ import com.github.imgabreuw.token.number.NumberToken;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * References: <br>
+ * <ul>
+ *     <li><a href="https://refactoring.guru/design-patterns/visitor">Visitor Design Pattern</a></li>
+ * </ul>
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class OperandNode extends Node {

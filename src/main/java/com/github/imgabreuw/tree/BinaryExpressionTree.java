@@ -6,6 +6,12 @@ import lombok.*;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * References: <br>
+ * <ul>
+ *     <li><a href="https://www.geeksforgeeks.org/expression-tree/">Expression Tree</a></li>
+ * </ul>
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

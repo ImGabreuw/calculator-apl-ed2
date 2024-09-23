@@ -1,4 +1,4 @@
-package com.github.imgabreuw;
+package com.github.imgabreuw.helpers;
 
 import lombok.Data;
 
