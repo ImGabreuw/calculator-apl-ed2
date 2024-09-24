@@ -34,6 +34,6 @@ public class CalculateExpressionOption implements MenuOption {
 
     @Override
     public String getMessage() {
-        return "Criação da árvore binária de expressão aritmética.";
+        return "Cálculo da expressão (realizando o percurso da árvore).";
     }
 }
